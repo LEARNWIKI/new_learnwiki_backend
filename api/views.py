@@ -46,6 +46,15 @@ class NodeListView(ListAPIView):
         else:
             return Response(serializer.errors, status=400)
 
+    def put(self, request):
+        node = self.queryset.objects.get(pk=request.data['id'])
+        serializer = self.serializer_class(node, data=request.data)
+        if serializer.is_valid(raise_exception=False):
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=400)
+
 
 class LinkListView(ListAPIView):
     queryset = Link
